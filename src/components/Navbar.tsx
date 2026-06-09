@@ -315,22 +315,25 @@ export default function Navbar({
             </AnimatePresence>
           </div>
 
-          {/* ── Mobile compact chip ── */}
+          {/* ── Mobile search pill ── */}
           <button
+            type="button"
             onClick={() => setMobileOpen(true)}
-            className="md:hidden flex-1 mx-2 flex items-center gap-3 h-12 rounded-full border border-zinc-200 shadow-sm px-4 hover:shadow-md transition-shadow text-left"
+            className="md:hidden flex-1 ml-3 flex items-center gap-3 h-12 rounded-full bg-white border border-zinc-200 shadow-[0_2px_12px_rgba(0,0,0,0.1)] px-4 active:scale-[0.98] transition-transform text-left"
+            style={{ touchAction: 'manipulation' }}
           >
-            <svg className="w-4 h-4 text-zinc-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <div className="min-w-0">
-              <span className="text-sm font-semibold text-zinc-900 block truncate">{localQ || 'Search destinations'}</span>
-              {dateDisplay && <span className="text-xs text-zinc-400">{dateDisplay}</span>}
+            <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
+            <span className="text-sm font-semibold text-zinc-500 block truncate">
+              What are you looking for?
+            </span>
           </button>
 
-          {/* ── Right: host link + profile menu ── */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          {/* ── Right: host link + profile menu (desktop only — mobile uses BottomNav) ── */}
+          <div className="hidden md:flex items-center gap-1 flex-shrink-0">
             {!profile && (
               <Link href="/login" className="hidden md:block text-sm font-semibold text-zinc-700 hover:bg-zinc-100 px-4 py-2.5 rounded-full transition-colors whitespace-nowrap">
                 Become a host
@@ -449,7 +452,7 @@ export default function Navbar({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[59] bg-black/30 backdrop-blur-[2px]"
             onClick={() => setMobileOpen(false)}
           />
         )}
@@ -462,10 +465,11 @@ export default function Navbar({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -16 }}
             transition={{ type: 'spring', stiffness: 340, damping: 36 }}
-            style={{ transformOrigin: 'top center' }}
-            className="fixed top-4 left-4 right-4 z-50"
+            style={{ transformOrigin: 'top center', touchAction: 'pan-y' }}
+            className="fixed top-4 left-4 right-4 z-[60]"
           >
             <div className="bg-white rounded-3xl shadow-2xl border border-zinc-100 overflow-hidden">
+              <div className="overflow-y-auto max-h-[calc(100dvh-2rem)]">
               <div className="p-5 space-y-4">
                 {/* Where */}
                 <div>
@@ -475,7 +479,6 @@ export default function Navbar({
                     value={localQ}
                     onChange={(e) => setLocalQ(e.target.value)}
                     placeholder="Search destinations…"
-                    autoFocus
                     className="w-full px-4 py-3 rounded-2xl border border-zinc-200 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                   />
                   {localQ === '' && (
@@ -536,6 +539,7 @@ export default function Navbar({
                     Search
                   </button>
                 </div>
+              </div>
               </div>
             </div>
           </motion.div>

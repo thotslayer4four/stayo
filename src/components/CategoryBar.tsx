@@ -103,14 +103,14 @@ export default function CategoryBar({ activeType, q, checkIn, checkOut, guests, 
         <div className="flex items-center gap-4">
           {/* Scrollable category tabs */}
           <div className="flex-1 overflow-x-auto no-scrollbar">
-            <div className="flex items-center gap-8 py-3 w-max">
+            <div className="flex items-center py-3 w-full md:w-max md:gap-8">
               {CATEGORIES.map((cat) => {
                 const isActive = activeType === cat.value
                 return (
                   <button
                     key={cat.value}
                     onClick={() => setType(cat.value)}
-                    className={`relative flex flex-col items-center gap-1.5 pb-3 flex-shrink-0 transition-colors ${
+                    className={`relative flex flex-col items-center gap-1.5 pb-3 flex-1 md:flex-shrink-0 transition-colors ${
                       isActive ? 'text-brand' : 'text-zinc-400 hover:text-zinc-700'
                     }`}
                   >
@@ -129,8 +129,8 @@ export default function CategoryBar({ activeType, q, checkIn, checkOut, guests, 
             </div>
           </div>
 
-          {/* Sort + Filter controls */}
-          <div className="flex items-center gap-2 flex-shrink-0 py-3">
+          {/* Sort + Filter controls — desktop only */}
+          <div className="hidden md:flex items-center gap-2 flex-shrink-0 py-3">
             {/* Sort select */}
             <div className="relative">
               <select

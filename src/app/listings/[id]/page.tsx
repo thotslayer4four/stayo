@@ -8,6 +8,7 @@ import ImageGallery from '@/components/ImageGallery'
 import BookingPanel from '@/components/BookingPanel'
 import ListingCard from '@/components/ListingCard'
 import ShareButton from '@/components/ShareButton'
+import BottomNav from '@/components/BottomNav'
 import { formatNaira, formatDate } from '@/lib/utils'
 import type { Listing } from '@/types'
 
@@ -93,7 +94,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-white">
       <Navbar profile={profile} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-32 lg:pb-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-36 md:pb-32 lg:pb-16">
         {/* Back */}
         <Link
           href="/"
@@ -254,6 +255,8 @@ export default async function ListingDetailPage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+
+      <BottomNav />
     </div>
   )
 }

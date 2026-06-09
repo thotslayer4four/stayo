@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import CategoryBar from '@/components/CategoryBar'
 import ListingGrid from '@/components/ListingGrid'
 import AIRecommendations from '@/components/AIRecommendations'
+import BottomNav from '@/components/BottomNav'
 import type { Listing } from '@/types'
 
 const PAGE_SIZE = 24
@@ -109,7 +110,7 @@ export default async function BrowsePage({ searchParams }: PageProps) {
         guests={params.guests}
       />
 
-      {/* pt-20 to clear the fixed navbar */}
+      {/* pt-20 clears the fixed navbar */}
       <div className="pt-20">
         <CategoryBar
           activeType={params.type ?? 'all'}
@@ -122,11 +123,12 @@ export default async function BrowsePage({ searchParams }: PageProps) {
           sort={sort}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* pb-24 on mobile gives room for the fixed bottom nav */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 md:pb-8">
           {process.env.ANTHROPIC_API_KEY && <AIRecommendations />}
 
           {filteredListings.length > 0 && (
-            <p className="text-sm text-zinc-500 mb-6">
+            <p className="hidden md:block text-sm text-zinc-500 mb-6">
               {totalCount != null && totalCount > PAGE_SIZE
                 ? `Showing ${offset + 1}–${Math.min(offset + filteredListings.length, totalCount)} of ${totalCount} listings`
                 : `${filteredListings.length} ${filteredListings.length === 1 ? 'listing' : 'listings'} in Abuja`}
@@ -183,6 +185,8 @@ export default async function BrowsePage({ searchParams }: PageProps) {
           })()}
         </main>
       </div>
+
+      <BottomNav />
     </div>
   )
 }

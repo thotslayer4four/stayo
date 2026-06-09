@@ -18,6 +18,38 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.38 } },
 }
 
+const mobileItem: Variants = {
+  hidden: { opacity: 0, x: 16 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.32 } },
+}
+
+function MobileSection({ title, listings }: { title: string; listings: Listing[] }) {
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-4 px-4">
+        <h2 className="text-xl font-extrabold text-zinc-900 tracking-tight">{title}</h2>
+        <div className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center">
+          <svg className="w-3.5 h-3.5 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+      <motion.div
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } } }}
+        initial="hidden"
+        animate="show"
+        className="flex gap-3 overflow-x-auto px-4 pb-3 no-scrollbar"
+      >
+        {listings.map((listing) => (
+          <motion.div key={listing.id} variants={mobileItem} className="w-[185px] flex-shrink-0">
+            <ListingCard listing={listing} />
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  )
+}
+
 export default function ListingGrid({ listings }: Props) {
   if (listings.length === 0) {
     return (
@@ -45,18 +77,40 @@ export default function ListingGrid({ listings }: Props) {
     )
   }
 
+  const shortlets = listings.filter((l) => l.type === 'shortlet')
+  const cars = listings.filter((l) => l.type === 'car')
+  const showTwoSections = shortlets.length > 0 && cars.length > 0
+
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10"
-    >
-      {listings.map((listing) => (
-        <motion.div key={listing.id} variants={item}>
-          <ListingCard listing={listing} />
-        </motion.div>
-      ))}
-    </motion.div>
+    <>
+      {/* ── Mobile: horizontal scroll sections ── */}
+      <div className="md:hidden -mx-4">
+        {showTwoSections ? (
+          <>
+            <MobileSection title="Shortlets in Abuja" listings={shortlets} />
+            <MobileSection title="Cars in Abuja" listings={cars} />
+          </>
+        ) : (
+          <MobileSection
+            title={cars.length > 0 && shortlets.length === 0 ? 'Cars in Abuja' : 'Shortlets in Abuja'}
+            listings={listings}
+          />
+        )}
+      </div>
+
+      {/* ── Desktop: staggered grid ── */}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10"
+      >
+        {listings.map((listing) => (
+          <motion.div key={listing.id} variants={item}>
+            <ListingCard listing={listing} />
+          </motion.div>
+        ))}
+      </motion.div>
+    </>
   )
 }
