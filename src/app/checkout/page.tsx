@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -28,10 +29,12 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  const publicSupabase = createPublicClient()
+
   const [profileResult, listingResult, carsResult] = await Promise.all([
     supabase.from('users').select('*').eq('id', user.id).single(),
-    supabase.from('listings').select('*').eq('id', params.listing).eq('is_active', true).single(),
-    supabase
+    publicSupabase.from('listings').select('*').eq('id', params.listing).eq('is_active', true).single(),
+    publicSupabase
       .from('listings')
       .select('*')
       .eq('type', 'car')
