@@ -26,12 +26,17 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  const isPublic =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/auth/')
+  // Only these routes require authentication
+  const isProtected =
+    pathname.startsWith('/checkout') ||
+    pathname.startsWith('/bookings') ||
+    pathname.startsWith('/host') ||
+    pathname.startsWith('/admin')
 
-  if (!user && !isPublic) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  if (!user && isProtected) {
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('next', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
   if (user && pathname === '/login') {

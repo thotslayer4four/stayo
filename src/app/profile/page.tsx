@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
+import BottomNav from '@/components/BottomNav'
 import CopyButton from '@/components/CopyButton'
 import type { DbUser } from '@/types'
 
@@ -32,7 +33,7 @@ export default async function ProfilePage() {
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar profile={p} />
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-28 md:pb-16">
         <h1 className="text-2xl font-bold text-zinc-900 mb-8">Your Profile</h1>
 
         {/* Avatar + name */}
@@ -125,6 +126,7 @@ export default async function ProfilePage() {
           </div>
         </div>
       </main>
+      <BottomNav />
     </div>
   )
 }

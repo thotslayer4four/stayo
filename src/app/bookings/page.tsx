@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
+import BottomNav from '@/components/BottomNav'
 import { formatNaira, formatDate, formatDateTime } from '@/lib/utils'
 
 export default async function BookingsPage() {
@@ -34,7 +35,7 @@ export default async function BookingsPage() {
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar profile={profile} />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-24 pb-28 md:pb-16">
         <h1 className="text-2xl font-bold text-zinc-900 mb-8">My Bookings</h1>
 
         {!bookings || bookings.length === 0 ? (
@@ -116,6 +117,7 @@ export default async function BookingsPage() {
           </div>
         )}
       </main>
+      <BottomNav />
     </div>
   )
 }

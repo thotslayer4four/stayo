@@ -6,10 +6,10 @@ import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import ImageGallery from '@/components/ImageGallery'
 import BookingPanel from '@/components/BookingPanel'
+import MobileBookingSheet from '@/components/MobileBookingSheet'
 import ListingCard from '@/components/ListingCard'
 import ShareButton from '@/components/ShareButton'
-import BottomNav from '@/components/BottomNav'
-import { formatNaira, formatDate } from '@/lib/utils'
+
 import type { Listing } from '@/types'
 
 interface PageProps {
@@ -83,18 +83,12 @@ export default async function ListingDetailPage({ params }: PageProps) {
   const profile = profileResult.data
   const similarListings = (similarResult.data ?? []) as Listing[]
   const isShortlet = l.type === 'shortlet'
-  const isCar = l.type === 'car'
-  const price = isShortlet ? l.price_per_night : l.price_per_day
-  const priceUnit = isShortlet ? '/night' : '/day'
-  const hourlyRate = isCar
-    ? (l.price_per_hour ?? (l.price_per_day ? Math.round(l.price_per_day / 24) : null))
-    : null
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar profile={profile} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-36 md:pb-32 lg:pb-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-28 lg:pb-16">
         {/* Back */}
         <Link
           href="/"
@@ -233,30 +227,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
         )}
       </main>
 
-      {/* Mobile sticky bar */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-zinc-100 px-4 py-4 z-40">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-zinc-900">
-                {price != null ? formatNaira(price) : '—'}
-              </span>
-              <span className="text-sm text-zinc-500">{priceUnit}</span>
-            </div>
-            {hourlyRate != null && (
-              <span className="text-xs text-zinc-400">{formatNaira(hourlyRate)}/hr</span>
-            )}
-          </div>
-          <Link
-            href={`/checkout?listing=${l.id}`}
-            className="px-6 py-3.5 rounded-xl bg-brand text-white text-sm font-bold hover:bg-brand-hover transition-colors"
-          >
-            Reserve
-          </Link>
-        </div>
-      </div>
-
-      <BottomNav />
+      <MobileBookingSheet listing={l} />
     </div>
   )
 }

@@ -9,10 +9,12 @@ function LoginForm() {
   const supabase = createClient()
   const searchParams = useSearchParams()
   const ref = searchParams.get('ref')
+  const next = searchParams.get('next')
 
   async function signInWithGoogle() {
     const callbackUrl = new URL(`${window.location.origin}/auth/callback`)
     if (ref) callbackUrl.searchParams.set('ref', ref)
+    if (next) callbackUrl.searchParams.set('next', next)
 
     await supabase.auth.signInWithOAuth({
       provider: 'google',

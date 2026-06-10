@@ -18,30 +18,20 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.38 } },
 }
 
-const mobileItem: Variants = {
-  hidden: { opacity: 0, x: 16 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.32 } },
-}
-
-function MobileSection({ title, listings }: { title: string; listings: Listing[] }) {
+function MobileSection({ title, listings, showTitle }: { title: string; listings: Listing[]; showTitle: boolean }) {
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-4 px-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 tracking-tight">{title}</h2>
-        <div className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center">
-          <svg className="w-3.5 h-3.5 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
+    <div className={showTitle ? 'mb-8' : ''}>
+      {showTitle && (
+        <h2 className="text-base font-bold text-zinc-900 mb-4">{title}</h2>
+      )}
       <motion.div
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } } }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } } }}
         initial="hidden"
         animate="show"
-        className="flex gap-3 overflow-x-auto px-4 pb-3 no-scrollbar"
+        className="grid grid-cols-2 gap-x-3 gap-y-6"
       >
         {listings.map((listing) => (
-          <motion.div key={listing.id} variants={mobileItem} className="w-[185px] flex-shrink-0">
+          <motion.div key={listing.id} variants={item}>
             <ListingCard listing={listing} />
           </motion.div>
         ))}
@@ -83,17 +73,18 @@ export default function ListingGrid({ listings }: Props) {
 
   return (
     <>
-      {/* ── Mobile: horizontal scroll sections ── */}
-      <div className="md:hidden -mx-4">
+      {/* ── Mobile: 2-column vertical grid ── */}
+      <div className="md:hidden">
         {showTwoSections ? (
           <>
-            <MobileSection title="Shortlets in Abuja" listings={shortlets} />
-            <MobileSection title="Cars in Abuja" listings={cars} />
+            <MobileSection title="Shortlets in Abuja" listings={shortlets} showTitle />
+            <MobileSection title="Cars in Abuja" listings={cars} showTitle />
           </>
         ) : (
           <MobileSection
             title={cars.length > 0 && shortlets.length === 0 ? 'Cars in Abuja' : 'Shortlets in Abuja'}
             listings={listings}
+            showTitle={false}
           />
         )}
       </div>

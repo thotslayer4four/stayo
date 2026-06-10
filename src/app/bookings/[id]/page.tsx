@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
+import BottomNav from '@/components/BottomNav'
 import CancelBookingButton from '@/components/CancelBookingButton'
 import { formatNaira, formatDate, formatDateTime } from '@/lib/utils'
 
@@ -47,7 +48,7 @@ export default async function BookingDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar profile={profile} />
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-28 md:pb-16">
         <Link
           href="/bookings"
           className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors mb-6"
@@ -174,6 +175,7 @@ export default async function BookingDetailPage({ params }: PageProps) {
           Booked on {formatDate(booking.created_at)} · Booking ID: {booking.id.slice(0, 8).toUpperCase()}
         </p>
       </main>
+      <BottomNav />
     </div>
   )
 }
